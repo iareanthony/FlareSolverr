@@ -1,4 +1,4 @@
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.13-slim-trixie AS builder
 
 # Build dummy packages to skip installing them and their dependencies
 RUN apt-get update \
@@ -12,7 +12,7 @@ RUN apt-get update \
     && equivs-build adwaita-icon-theme \
     && mv adwaita-icon-theme_*.deb /adwaita-icon-theme.deb
 
-FROM python:3.11-slim-bookworm
+FROM python:3.13-slim-trixie
 
 # Copy dummy packages
 COPY --from=builder /*.deb /
@@ -30,7 +30,7 @@ RUN dpkg -i /libgl1-mesa-dri.deb \
     # Install dependencies
     && apt-get update \
     && apt-get install -y --no-install-recommends chromium chromium-common chromium-driver xvfb dumb-init \
-        procps curl vim xauth \
+        procps xauth \
     # Remove temporary files and hardware decoding libraries
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /usr/lib/x86_64-linux-gnu/libmfxhw* \
@@ -47,9 +47,7 @@ VOLUME /config
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install -r requirements.txt \
-    # Remove temporary files
-    && rm -rf /root/.cache
+RUN pip install --no-cache-dir -r requirements.txt
 
 USER flaresolverr
 
