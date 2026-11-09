@@ -345,5 +345,10 @@ to the file name of one of the adapters inside the `/captcha` directory.
 
 ## Related projects
 
+## Image maintenance
+
+The container build applies current Debian Trixie security updates and installs
+current pinned Python dependencies on every uncached release build.
+
 - C# implementation => https://github.com/FlareSolverr/FlareSolverrSharp
 

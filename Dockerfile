@@ -29,6 +29,7 @@ RUN dpkg -i /libgl1-mesa-dri.deb \
     && dpkg -i /adwaita-icon-theme.deb \
     # Install dependencies
     && apt-get update \
+    && apt-get full-upgrade -y \
     && apt-get install -y --no-install-recommends chromium chromium-common chromium-driver xvfb dumb-init \
         procps xauth \
     # Remove temporary files and hardware decoding libraries
@@ -47,7 +48,8 @@ VOLUME /config
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade pip==26.3 \
+    && pip install --no-cache-dir -r requirements.txt
 
 USER flaresolverr
 
